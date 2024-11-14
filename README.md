@@ -15,3 +15,11 @@
 > Start with a clean and minimal install of a Linux system. DevStack attempts to support the two latest LTS releases of Ubuntu, Rocky Linux 9 and openEuler.
 >
 > If you do not have a preference, **Ubuntu 22.04 (Jammy)** is the most tested, and will probably go the smoothest.
+
+<br/>
+
+### Openstack Security Guide
+
+> <https://docs.openstack.org/security-guide/>
+
+**This book provides best practices and conceptual information about securing an OpenStack cloud.**
