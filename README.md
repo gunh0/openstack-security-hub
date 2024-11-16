@@ -23,3 +23,13 @@
 > <https://docs.openstack.org/security-guide/>
 
 **This book provides best practices and conceptual information about securing an OpenStack cloud.**
+
+- [identity-01] Is user/group ownership of config files set to keystone?
+  - [x] [identity-01-01] `/etc/keystone/keystone.conf`
+  - [ ] `/etc/keystone/keystone-paste.ini`
+  - [ ] `/etc/keystone/policy.json`
+  - [ ] `/etc/keystone/logging.conf`
+  - [ ] `/etc/keystone/ssl/certs/signing_cert.pem`
+  - [ ] `/etc/keystone/ssl/private/signing_key.pem`
+  - [ ] `/etc/keystone/ssl/certs/ca.pem`
+  - [ ] `/etc/keystone`
