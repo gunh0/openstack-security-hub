@@ -27,47 +27,46 @@ func checkFileOwnership(client *ssh.Client, filepath string) CheckResult {
 	}
 	defer session.Close()
 
-	// Execute the stat command with grep for keystone ownership
-	cmd := fmt.Sprintf(`stat -L -c "%%U %%G" %s | egrep "keystone keystone" || echo "FAILED"`, filepath)
+	// First check current ownership
+	cmd := fmt.Sprintf(`
+        if [ -e "%s" ]; then
+            stat -L -c "%%U %%G" "%s"
+        else
+            echo "FILE_NOT_FOUND"
+        fi
+    `, filepath, filepath)
+
 	output, err := session.CombinedOutput(cmd)
 	if err != nil {
-		// Check if the error is due to file not existing
-		checkExist := fmt.Sprintf("stat -L -c \"%%U %%G\" %s", filepath)
-		_, existErr := session.CombinedOutput(checkExist)
-		if existErr != nil {
-			return CheckResult{
-				Status:      "[NA]",
-				Description: fmt.Sprintf("Is user/group ownership of %s set to keystone?", filepath),
-				Details:     "File does not exist",
-			}
-		}
-	}
-
-	result := strings.TrimSpace(string(output))
-	if result == "FAILED" {
-		// File exists but ownership is not keystone:keystone
-		// Get current ownership for detailed output
-		cmd = fmt.Sprintf(`stat -L -c "%%U %%G" %s`, filepath)
-		currentOwnership, _ := session.CombinedOutput(cmd)
 		return CheckResult{
-			Status:      "[FAIL]",
+			Status:      "[ERROR]",
 			Description: fmt.Sprintf("Is user/group ownership of %s set to keystone?", filepath),
-			Details:     fmt.Sprintf("Current ownership: %s (expected: keystone keystone)", strings.TrimSpace(string(currentOwnership))),
+			Details:     fmt.Sprintf("Failed to execute command: %v", err),
 		}
 	}
 
-	if result == "keystone keystone" {
+	currentOwnership := strings.TrimSpace(string(output))
+	if currentOwnership == "FILE_NOT_FOUND" {
+		return CheckResult{
+			Status:      "[NA]",
+			Description: fmt.Sprintf("Is user/group ownership of %s set to keystone?", filepath),
+			Details:     "File does not exist",
+		}
+	}
+
+	// Check if ownership is correct
+	if currentOwnership == "keystone keystone" {
 		return CheckResult{
 			Status:      "[PASS]",
 			Description: fmt.Sprintf("Is user/group ownership of %s set to keystone?", filepath),
-			Details:     "File is owned by keystone:keystone",
+			Details:     fmt.Sprintf("Current ownership is correct: %s", currentOwnership),
 		}
 	}
 
 	return CheckResult{
-		Status:      "[ERROR]",
+		Status:      "[FAIL]",
 		Description: fmt.Sprintf("Is user/group ownership of %s set to keystone?", filepath),
-		Details:     "Unexpected error while checking file ownership",
+		Details:     fmt.Sprintf("Current ownership: %s (expected: keystone keystone)", currentOwnership),
 	}
 }
 
