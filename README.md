@@ -26,10 +26,19 @@
 
 - [identity-01] Is user/group ownership of config files set to keystone?
   - [x] [identity-01-01] `/etc/keystone/keystone.conf`
-  - [ ] `/etc/keystone/keystone-paste.ini`
-  - [ ] `/etc/keystone/policy.json`
-  - [ ] `/etc/keystone/logging.conf`
-  - [ ] `/etc/keystone/ssl/certs/signing_cert.pem`
-  - [ ] `/etc/keystone/ssl/private/signing_key.pem`
-  - [ ] `/etc/keystone/ssl/certs/ca.pem`
-  - [ ] `/etc/keystone`
+  - [x] [identity-01-02] `/etc/keystone/keystone-paste.ini`
+  - [x] [identity-01-03] `/etc/keystone/policy.json`
+  - [x] [identity-01-04] `/etc/keystone/logging.conf`
+  - [x] [identity-01-05] `/etc/keystone/ssl/certs/signing_cert.pem`
+  - [x] [identity-01-06] `/etc/keystone/ssl/private/signing_key.pem`
+  - [x] [identity-01-07] `/etc/keystone/ssl/certs/ca.pem`
+  - [x] [identity-01-08] `/etc/keystone`
+- [identity-02] Are strict permissions set for Identity configuration files?
+  - [x] [identity-02-01] `/etc/keystone/keystone.conf`
+  - [x] [identity-02-02] `/etc/keystone/keystone-paste.ini`
+  - [x] [identity-02-03] `/etc/keystone/policy.json`
+  - [x] [identity-02-04] `/etc/keystone/logging.conf`
+  - [x] [identity-02-05] `/etc/keystone/ssl/certs/signing_cert.pem`
+  - [x] [identity-02-06] `/etc/keystone/ssl/private/signing_key.pem`
+  - [x] [identity-02-07] `/etc/keystone/ssl/certs/ca.pem`
+  - [x] [identity-02-08] `/etc/keystone`

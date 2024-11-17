@@ -38,61 +38,13 @@ dev:
 test-health:
 	curl -X GET $(API_BASE)/health
 
-# API checks
-api-identity-01:
-	curl -s $(API_BASE)/check/identity-01 | python3 -m json.tool
+# Pattern rules for CLI checks
+cli-identity-%:
+	$(GORUN) $(MAIN_FILE) identity-$*
 
-api-identity-01-01:
-	curl -s $(API_BASE)/check/identity-01-01 | python3 -m json.tool
-
-api-identity-01-02:
-	curl -s $(API_BASE)/check/identity-01-02 | python3 -m json.tool
-
-api-identity-01-03:
-	curl -s $(API_BASE)/check/identity-01-03 | python3 -m json.tool
-
-api-identity-01-04:
-	curl -s $(API_BASE)/check/identity-01-04 | python3 -m json.tool
-
-api-identity-01-05:
-	curl -s $(API_BASE)/check/identity-01-05 | python3 -m json.tool
-
-api-identity-01-06:
-	curl -s $(API_BASE)/check/identity-01-06 | python3 -m json.tool
-
-api-identity-01-07:
-	curl -s $(API_BASE)/check/identity-01-07 | python3 -m json.tool
-
-api-identity-01-08:
-	curl -s $(API_BASE)/check/identity-01-08 | python3 -m json.tool
-
-# CLI checks
-cli-identity-01:
-	$(GORUN) $(MAIN_FILE) identity-01
-
-cli-identity-01-01:
-	$(GORUN) $(MAIN_FILE) identity-01-01
-
-cli-identity-01-02:
-	$(GORUN) $(MAIN_FILE) identity-01-02
-
-cli-identity-01-03:
-	$(GORUN) $(MAIN_FILE) identity-01-03
-
-cli-identity-01-04:
-	$(GORUN) $(MAIN_FILE) identity-01-04
-
-cli-identity-01-05:
-	$(GORUN) $(MAIN_FILE) identity-01-05
-
-cli-identity-01-06:
-	$(GORUN) $(MAIN_FILE) identity-01-06
-
-cli-identity-01-07:
-	$(GORUN) $(MAIN_FILE) identity-01-07
-
-cli-identity-01-08:
-	$(GORUN) $(MAIN_FILE) identity-01-08
+# Pattern rules for API checks
+api-identity-%:
+	curl -s $(API_BASE)/check/identity-$* | python3 -m json.tool
 
 # Run all checks
 check-all:
