@@ -16,6 +16,11 @@
 >
 > If you do not have a preference, **Ubuntu 22.04 (Jammy)** is the most tested, and will probably go the smoothest.
 
+**Installed (Tested) Versions**
+
+- Ubuntu 22.04 (Jammy)
+- openstack 7.1.3
+
 <br/>
 
 ### Openstack Security Guide
@@ -42,3 +47,5 @@
   - [x] [identity-02-06] `/etc/keystone/ssl/private/signing_key.pem`
   - [x] [identity-02-07] `/etc/keystone/ssl/certs/ca.pem`
   - [x] [identity-02-08] `/etc/keystone`
+- [x] [identity-03] is TLS enabled for Identity?
+- [identity-04] (Obsolete)

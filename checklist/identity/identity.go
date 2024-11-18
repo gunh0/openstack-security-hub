@@ -214,3 +214,42 @@ func CheckIdentity0207(client *ssh.Client) CheckResult {
 func CheckIdentity0208(client *ssh.Client) CheckResult {
 	return checkFilePermissions(client, "/etc/keystone", true)
 }
+
+func CheckIdentity03(client *ssh.Client) CheckResult {
+	session, err := client.NewSession()
+	if err != nil {
+		return CheckResult{
+			Status:      "[ERROR]",
+			Description: "Is TLS enabled for Identity?",
+			Details:     fmt.Sprintf("Failed to create SSH session: %v", err),
+		}
+	}
+	defer session.Close()
+
+	// Check if port 443 is in use (exact match)
+	cmd := `netstat -tnlp 2>/dev/null | grep ':443 ' || echo "HTTPS_DISABLED"`
+
+	output, err := session.CombinedOutput(cmd)
+	if err != nil {
+		return CheckResult{
+			Status:      "[ERROR]",
+			Description: "Is TLS enabled for Identity?",
+			Details:     fmt.Sprintf("Failed to execute check: %v", err),
+		}
+	}
+
+	result := strings.TrimSpace(string(output))
+	if result == "HTTPS_DISABLED" {
+		return CheckResult{
+			Status:      "[FAIL]",
+			Description: "Is TLS enabled for Identity?",
+			Details:     "HTTPS port 443 is not in use",
+		}
+	}
+
+	return CheckResult{
+		Status:      "[PASS]",
+		Description: "Is TLS enabled for Identity?",
+		Details:     fmt.Sprintf("HTTPS port 443 is in use: %s", result),
+	}
+}

@@ -121,6 +121,12 @@ func InitCommands(rootCmd *cobra.Command) {
 		Run:   runIdentity0208Check,
 	}
 
+	identity03Cmd := &cobra.Command{
+		Use:   "identity-03",
+		Short: "is TLS enabled for Identity?",
+		Run:   runIdentity03Check,
+	}
+
 	rootCmd.AddCommand(identity01Cmd)
 	rootCmd.AddCommand(identity0101Cmd)
 	rootCmd.AddCommand(identity0102Cmd)
@@ -139,6 +145,7 @@ func InitCommands(rootCmd *cobra.Command) {
 	rootCmd.AddCommand(identity0206Cmd)
 	rootCmd.AddCommand(identity0207Cmd)
 	rootCmd.AddCommand(identity0208Cmd)
+	rootCmd.AddCommand(identity03Cmd)
 }
 
 func getSSHClient() (*ssh.Client, error) {
@@ -409,4 +416,16 @@ func runAllIdentity02Checks(cmd *cobra.Command, args []string) {
 		result := check.fn(client)
 		prettyPrintResult(result)
 	}
+}
+
+func runIdentity03Check(cmd *cobra.Command, args []string) {
+	client, err := getSSHClient()
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return
+	}
+	defer client.Close()
+
+	result := CheckIdentity03(client)
+	prettyPrintResult(result)
 }
