@@ -42,13 +42,15 @@ test-health:
 cli-identity-%:
 	$(GORUN) $(MAIN_FILE) identity-$*
 
+cli-check-all:
+	$(GORUN) $(MAIN_FILE) identity-01
+	$(GORUN) $(MAIN_FILE) identity-02
+	$(GORUN) $(MAIN_FILE) identity-03
+	$(GORUN) $(MAIN_FILE) identity-05
+
 # Pattern rules for API checks
 api-identity-%:
 	curl -s $(API_BASE)/check/identity-$* | python3 -m json.tool
-
-# Run all checks
-check-all:
-	$(GORUN) $(MAIN_FILE) identity-01
 
 # Help
 help:

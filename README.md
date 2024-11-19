@@ -49,3 +49,4 @@
   - [x] [identity-02-08] `/etc/keystone`
 - [x] [identity-03] is TLS enabled for Identity?
 - [identity-04] (Obsolete)
+- [x] [identity-05] Is max_request_body_size set to default (114688)?

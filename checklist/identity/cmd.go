@@ -4,6 +4,7 @@ package identity
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/spf13/cobra"
 	"golang.org/x/crypto/ssh"
@@ -123,8 +124,14 @@ func InitCommands(rootCmd *cobra.Command) {
 
 	identity03Cmd := &cobra.Command{
 		Use:   "identity-03",
-		Short: "is TLS enabled for Identity?",
+		Short: "Is TLS enabled for Identity?",
 		Run:   runIdentity03Check,
+	}
+
+	identity05Cmd := &cobra.Command{
+		Use:   "identity-05",
+		Short: "Is max_request_body_size set to default (114688)?",
+		Run:   runIdentity05Check,
 	}
 
 	rootCmd.AddCommand(identity01Cmd)
@@ -146,6 +153,7 @@ func InitCommands(rootCmd *cobra.Command) {
 	rootCmd.AddCommand(identity0207Cmd)
 	rootCmd.AddCommand(identity0208Cmd)
 	rootCmd.AddCommand(identity03Cmd)
+	rootCmd.AddCommand(identity05Cmd)
 }
 
 func getSSHClient() (*ssh.Client, error) {
@@ -161,10 +169,11 @@ func getSSHClient() (*ssh.Client, error) {
 }
 
 func prettyPrintResult(result CheckResult) {
-	fmt.Printf("\nCheck Result:\n")
-	fmt.Printf("Status: %s\n", result.Status)
+	fmt.Println(strings.Repeat("-", 100))
 	fmt.Printf("Description: %s\n", result.Description)
+	fmt.Printf("Result: %s\n", result.Result)
 	fmt.Printf("Details: %s\n", result.Details)
+	fmt.Println(strings.Repeat("-", 100))
 }
 
 func runIdentity0101Check(cmd *cobra.Command, args []string) {
@@ -286,7 +295,6 @@ func runAllIdentity01Checks(cmd *cobra.Command, args []string) {
 	}
 
 	for _, check := range checks {
-		fmt.Printf("\n=== Running %s ===\n", check.name)
 		result := check.fn(client)
 		prettyPrintResult(result)
 	}
@@ -412,7 +420,6 @@ func runAllIdentity02Checks(cmd *cobra.Command, args []string) {
 	}
 
 	for _, check := range checks {
-		fmt.Printf("\n=== Running %s ===\n", check.name)
 		result := check.fn(client)
 		prettyPrintResult(result)
 	}
@@ -427,5 +434,17 @@ func runIdentity03Check(cmd *cobra.Command, args []string) {
 	defer client.Close()
 
 	result := CheckIdentity03(client)
+	prettyPrintResult(result)
+}
+
+func runIdentity05Check(cmd *cobra.Command, args []string) {
+	client, err := getSSHClient()
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return
+	}
+	defer client.Close()
+
+	result := CheckIdentity05(client)
 	prettyPrintResult(result)
 }
