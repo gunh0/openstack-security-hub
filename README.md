@@ -50,3 +50,4 @@
 - [x] [identity-03] is TLS enabled for Identity?
 - [identity-04] (Obsolete)
 - [x] [identity-05] Is max_request_body_size set to default (114688)?
+- [x] [identity-06] Disable admin token in /etc/keystone/keystone.conf

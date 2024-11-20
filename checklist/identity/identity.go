@@ -351,3 +351,129 @@ func CheckIdentity05(client *ssh.Client) CheckResult {
 		Details:     fmt.Sprintf("max_request_body_size is set to a potentially unsafe value: %s bytes", value),
 	}
 }
+
+func CheckIdentity06(client *ssh.Client) CheckResult {
+	const (
+		description = "Disable admin token in /etc/keystone/keystone.conf"
+	)
+
+	session, err := client.NewSession()
+	if err != nil {
+		return CheckResult{
+			Description: description,
+			Result:      "[ERROR]",
+			Details:     fmt.Sprintf("Failed to create SSH session: %v", err),
+		}
+	}
+	defer session.Close()
+
+	// First check keystone.conf and extract admin_token value
+	cmd := `
+		# Check keystone.conf first
+		if [ ! -r "/etc/keystone/keystone.conf" ]; then
+			echo "KEYSTONE_CONF_PERMISSION_DENIED"
+			exit 0
+		fi
+		
+		if [ ! -f "/etc/keystone/keystone.conf" ]; then
+			echo "KEYSTONE_CONF_NOT_FOUND"
+			exit 0
+		fi
+ 
+		# Check admin_token in keystone.conf
+		admin_token=$(grep "^admin_token" /etc/keystone/keystone.conf 2>/dev/null | awk -F "=" '{print $2}' | tr -d ' ')
+		echo "ADMIN_TOKEN:${admin_token:-NOTSET}"
+ 
+		# Check keystone-paste.ini only if it exists
+		if [ -f "/etc/keystone/keystone-paste.ini" ]; then
+			if [ ! -r "/etc/keystone/keystone-paste.ini" ]; then
+				echo "PASTE_INI_PERMISSION_DENIED"
+			else
+				auth_middleware=$(grep "AdminTokenAuthMiddleware" /etc/keystone/keystone-paste.ini 2>/dev/null)
+				if [ -n "$auth_middleware" ]; then
+					echo "AUTH_MIDDLEWARE:EXISTS"
+				else
+					echo "AUTH_MIDDLEWARE:NOTFOUND"
+				fi
+			fi
+		else
+			echo "PASTE_INI_NOT_FOUND"
+		fi
+	`
+
+	output, err := session.CombinedOutput(cmd)
+	result := strings.TrimSpace(string(output))
+	lines := strings.Split(result, "\n")
+
+	// Process results
+	if strings.Contains(result, "KEYSTONE_CONF_PERMISSION_DENIED") {
+		return CheckResult{
+			Description: description,
+			Result:      "[NA]",
+			Details:     "Cannot check keystone.conf: permission denied",
+		}
+	}
+
+	if strings.Contains(result, "KEYSTONE_CONF_NOT_FOUND") {
+		return CheckResult{
+			Description: description,
+			Result:      "[NA]",
+			Details:     "keystone.conf not found",
+		}
+	}
+
+	var details strings.Builder
+	var adminTokenDisabled bool
+	var middlewareDisabled bool = true // Default to true if paste.ini doesn't exist
+
+	// Process admin_token status
+	for _, line := range lines {
+		if strings.HasPrefix(line, "ADMIN_TOKEN:") {
+			value := strings.TrimPrefix(line, "ADMIN_TOKEN:")
+			adminTokenDisabled = value == "NOTSET" || value == "<none>"
+			if !adminTokenDisabled {
+				details.WriteString(fmt.Sprintf("- admin_token is set with value: %s\n", value))
+			}
+		}
+
+		// Process middleware status if paste.ini exists
+		if strings.HasPrefix(line, "AUTH_MIDDLEWARE:") {
+			switch strings.TrimPrefix(line, "AUTH_MIDDLEWARE:") {
+			case "EXISTS":
+				middlewareDisabled = false
+				details.WriteString("- AdminTokenAuthMiddleware is present in keystone-paste.ini\n")
+			case "NOTFOUND":
+				middlewareDisabled = true
+			}
+		}
+	}
+
+	// If paste.ini doesn't exist or has permission issues, add note to details
+	if strings.Contains(result, "PASTE_INI_NOT_FOUND") {
+		details.WriteString("Note: keystone-paste.ini not found (this is acceptable)\n")
+	} else if strings.Contains(result, "PASTE_INI_PERMISSION_DENIED") {
+		details.WriteString("Warning: Cannot read keystone-paste.ini due to permission denied\n")
+	}
+
+	// Determine final result
+	switch {
+	case adminTokenDisabled && middlewareDisabled:
+		if details.Len() == 0 {
+			details.WriteString("admin_token is disabled and AdminTokenAuthMiddleware is not present")
+		}
+		return CheckResult{
+			Description: description,
+			Result:      "[PASS]",
+			Details:     details.String(),
+		}
+	default:
+		if details.Len() == 0 {
+			details.WriteString("Security configuration issues found")
+		}
+		return CheckResult{
+			Description: description,
+			Result:      "[FAIL]",
+			Details:     details.String(),
+		}
+	}
+}

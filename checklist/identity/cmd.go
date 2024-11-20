@@ -134,6 +134,12 @@ func InitCommands(rootCmd *cobra.Command) {
 		Run:   runIdentity05Check,
 	}
 
+	identity06Cmd := &cobra.Command{
+		Use:   "identity-06",
+		Short: "Disable admin token in /etc/keystone/keystone.conf",
+		Run:   runIdentity06Check,
+	}
+
 	rootCmd.AddCommand(identity01Cmd)
 	rootCmd.AddCommand(identity0101Cmd)
 	rootCmd.AddCommand(identity0102Cmd)
@@ -154,6 +160,7 @@ func InitCommands(rootCmd *cobra.Command) {
 	rootCmd.AddCommand(identity0208Cmd)
 	rootCmd.AddCommand(identity03Cmd)
 	rootCmd.AddCommand(identity05Cmd)
+	rootCmd.AddCommand(identity06Cmd)
 }
 
 func getSSHClient() (*ssh.Client, error) {
@@ -446,5 +453,17 @@ func runIdentity05Check(cmd *cobra.Command, args []string) {
 	defer client.Close()
 
 	result := CheckIdentity05(client)
+	prettyPrintResult(result)
+}
+
+func runIdentity06Check(cmd *cobra.Command, args []string) {
+	client, err := getSSHClient()
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return
+	}
+	defer client.Close()
+
+	result := CheckIdentity06(client)
 	prettyPrintResult(result)
 }
