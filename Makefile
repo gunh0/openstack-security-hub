@@ -28,10 +28,12 @@ clean:
 
 # Run the server
 run:
+	go mod tidy
 	$(GORUN) $(MAIN_FILE) server
 
 # Run with air (hot reload)
 dev:
+	go mod tidy
 	$(GOAIR)
 
 # Test health endpoint
@@ -41,6 +43,10 @@ test-health:
 # Pattern rules for CLI checks
 cli-identity-%:
 	$(GORUN) $(MAIN_FILE) identity-$*
+
+# Pattern rules for CLI checks
+cli-dashboard-%:
+	$(GORUN) $(MAIN_FILE) dashboard-$*
 
 cli-check-all:
 	$(GORUN) $(MAIN_FILE) identity-01
