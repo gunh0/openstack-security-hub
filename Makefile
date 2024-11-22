@@ -48,6 +48,9 @@ cli-identity-%:
 cli-dashboard-%:
 	$(GORUN) $(MAIN_FILE) dashboard-$*
 
+cli-key-manager-%:
+	$(GORUN) $(MAIN_FILE) key-manager-$*
+
 cli-check-all:
 	$(GORUN) $(MAIN_FILE) identity-01
 	$(GORUN) $(MAIN_FILE) identity-02

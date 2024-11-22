@@ -51,3 +51,5 @@
 - [identity-04] (Obsolete)
 - [x] [identity-05] Is max_request_body_size set to default (114688)?
 - [x] [identity-06] Disable admin token in /etc/keystone/keystone.conf
+- [key-manager-01] Is user/group ownership of config files set to barbican?
+  - [x] [key-manager-01-01] `/etc/barbican/barbican.conf`

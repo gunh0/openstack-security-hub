@@ -14,4 +14,5 @@ func init() {
 	// Initialize all service commands
 	initIdentityCommands()
 	initDashboardCommands()
+	initKeyManagerCommands()
 }
