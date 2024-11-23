@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/gunh0/openstack-security-hub/checklist"
+	"github.com/gunh0/openstack-security-hub/util"
 	"golang.org/x/crypto/ssh"
 )
 
@@ -85,4 +86,13 @@ func CheckDashboard01(client *ssh.Client) checklist.CheckResult {
 		Result:      "[ERROR]",
 		Details:     "Failed to determine file ownership",
 	}
+}
+
+// CheckDashboard04 checks if CSRF_COOKIE_SECURE parameter is set to True
+func CheckDashboard04(client *ssh.Client) checklist.CheckResult {
+	return util.ExecuteScriptAndGetResult(
+		client,
+		"checklist/dashboard/dashboard-04.sh",
+		"Is CSRF_COOKIE_SECURE parameter set to True?",
+	)
 }

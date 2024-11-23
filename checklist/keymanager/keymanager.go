@@ -9,7 +9,7 @@ import (
 func CheckKeyManager0101(client *ssh.Client) checklist.CheckResult {
 	return util.ExecuteScriptAndGetResult(
 		client,
-		"checklist/keymanager/KeyManager-01-01.sh",
+		"checklist/keymanager/Key-Manager-01-01.sh",
 		"Is the ownership of config files set to root/barbican?",
 	)
 }
