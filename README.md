@@ -52,6 +52,9 @@
 - [x] [identity-05] Is max_request_body_size set to default (114688)?
 - [x] [identity-06] Disable admin token in /etc/keystone/keystone.conf
 - [x] [dashboard-01] Is user/group of config files set to root/horizon?
+- [ ] [dashboard-02] Are strict permissions set for horizon configuration files?
+- [ ] [dashboard-03] Is DISALLOW_IFRAME_EMBED parameter set to True?
 - [x] [dashboard-04] Is CSRF_COOKIE_SECURE parameter set to True?
+- [x] [dashboard-05] Is SESSION_COOKIE_SECURE parameter set to True?
 - [key-manager-01] Is user/group ownership of config files set to barbican?
   - [x] [key-manager-01-01] `/etc/barbican/barbican.conf`

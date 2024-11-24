@@ -96,3 +96,12 @@ func CheckDashboard04(client *ssh.Client) checklist.CheckResult {
 		"Is CSRF_COOKIE_SECURE parameter set to True?",
 	)
 }
+
+// CheckDashboard05 checks if SESSION_COOKIE_SECURE parameter is set to True
+func CheckDashboard05(client *ssh.Client) checklist.CheckResult {
+	return util.ExecuteScriptAndGetResult(
+		client,
+		"checklist/dashboard/dashboard-05.sh",
+		"Is SESSION_COOKIE_SECURE parameter set to True?",
+	)
+}
