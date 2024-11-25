@@ -38,8 +38,8 @@ fi
 # Output JSON result
 cat <<EOF
 {
-  "description": "$DESCRIPTION",
-  "result": "$RESULT",
-  "details": "$DETAILS"
+    "description": "$DESCRIPTION",
+    "result": "$RESULT",
+    "details": "$DETAILS"
 }
 EOF

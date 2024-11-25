@@ -23,6 +23,13 @@ func RegisterIdentityRoutes(router *gin.RouterGroup) {
 	router.GET("/check/identity-01-08", checkIdentity0108)
 }
 
+// @Summary     Run all Identity-01 security checks
+// @Description Execute all Identity-01 series security checks for OpenStack
+// @Tags        identity
+// @Produce     json
+// @Success     200 {array}  checklist.CheckResult
+// @Failure     500 {object} map[string]string
+// @Router      /check/identity-01 [get]
 func handleIdentity01(c *gin.Context) {
 	client, err := util.GetSSHClient()
 	if err != nil {
@@ -73,6 +80,13 @@ func handleIdentityCheck(c *gin.Context, checkFn func(*ssh.Client) checklist.Che
 	c.JSON(http.StatusOK, result)
 }
 
+// @Summary     Run Identity-01-01 check
+// @Description Check Identity configuration security
+// @Tags        identity
+// @Produce     json
+// @Success     200 {object} checklist.CheckResult
+// @Failure     500 {object} map[string]string
+// @Router      /check/identity-01-01 [get]
 func checkIdentity0101(c *gin.Context) {
 	client, err := util.GetSSHClient()
 	if err != nil {
@@ -89,6 +103,13 @@ func checkIdentity0101(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
+// @Summary     Run Identity-01-02 check
+// @Description Check Identity configuration security
+// @Tags        identity
+// @Produce     json
+// @Success     200 {object} checklist.CheckResult
+// @Failure     500 {object} map[string]string
+// @Router      /check/identity-01-02 [get]
 func checkIdentity0102(c *gin.Context) {
 	client, err := util.GetSSHClient()
 	if err != nil {

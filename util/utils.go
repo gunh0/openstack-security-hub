@@ -32,6 +32,7 @@ func PrettyPrintResult(result checklist.CheckResult) {
 	fmt.Printf("Description: %s\n", result.Description)
 	fmt.Printf("Result: %s\n", result.Result)
 	fmt.Printf("Details: %s\n", result.Details)
+	fmt.Printf("Timestamp: %s\n", result.Timestamp)
 	fmt.Println(strings.Repeat("-", 100))
 }
 

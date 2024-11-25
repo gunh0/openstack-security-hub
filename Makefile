@@ -7,6 +7,7 @@ GOBUILD=$(GOCMD) build
 GORUN=$(GOCMD) run
 GOCLEAN=$(GOCMD) clean
 GOAIR=air
+SWAG=swag
 
 # Main entry point
 MAIN_FILE=main.go
@@ -14,7 +15,7 @@ MAIN_FILE=main.go
 # API endpoints
 API_BASE=http://localhost:8080/api/v1
 
-.PHONY: build clean run dev test-health api-check cli-check
+.PHONY: build clean run dev test-health api-check cli-check swagger-init swagger-fmt
 
 # Build the binary
 build:
@@ -25,14 +26,23 @@ clean:
 	$(GOCLEAN)
 	rm -f $(BINARY_NAME)
 	rm -rf ./tmp
+	rm -rf ./docs
 
-# Run the server
-run:
+# Generate Swagger documentation
+swagger-init:
+	$(SWAG) init
+
+# Format Swagger documentation
+swagger-fmt:
+	$(SWAG) fmt
+
+# Run the server (no arguments for server mode)
+run: swagger-init
 	go mod tidy
-	$(GORUN) $(MAIN_FILE) server
+	$(GORUN) $(MAIN_FILE)
 
 # Run with air (hot reload)
-dev:
+dev: swagger-init
 	go mod tidy
 	$(GOAIR)
 
@@ -40,37 +50,63 @@ dev:
 test-health:
 	curl -X GET $(API_BASE)/health
 
-# Pattern rules for CLI checks
+# CLI commands
 cli-identity-%:
 	$(GORUN) $(MAIN_FILE) identity-$*
 
-# Pattern rules for CLI checks
 cli-dashboard-%:
 	$(GORUN) $(MAIN_FILE) dashboard-$*
 
-cli-key-manager-%:
-	$(GORUN) $(MAIN_FILE) key-manager-$*
+cli-keymanager-%:
+	$(GORUN) $(MAIN_FILE) keymanager-$*
 
+# Run all checks via CLI
 cli-check-all:
-	$(GORUN) $(MAIN_FILE) identity-01
-	$(GORUN) $(MAIN_FILE) identity-02
-	$(GORUN) $(MAIN_FILE) identity-03
-	$(GORUN) $(MAIN_FILE) identity-05
+	@echo "Running all Identity checks..."
+	$(MAKE) cli-identity-01
+	$(MAKE) cli-identity-02
+	$(MAKE) cli-identity-03
+	$(MAKE) cli-identity-05
+	@echo "Running all Dashboard checks..."
+	$(MAKE) cli-dashboard-01
+	$(MAKE) cli-dashboard-02
+	$(MAKE) cli-dashboard-03
+	$(MAKE) cli-dashboard-04
+	$(MAKE) cli-dashboard-05
+	@echo "Running all Keymanager checks..."
+	$(MAKE) cli-keymanager-01
 
-# Pattern rules for API checks
+# API checks
 api-identity-%:
 	curl -s $(API_BASE)/check/identity-$* | python3 -m json.tool
+
+api-dashboard-%:
+	curl -s $(API_BASE)/check/dashboard-$* | python3 -m json.tool
+
+api-keymanager-%:
+	curl -s $(API_BASE)/check/keymanager-$* | python3 -m json.tool
 
 # Help
 help:
 	@echo "Available commands:"
-	@echo "  make build              - Build the binary"
-	@echo "  make clean              - Clean build files"
-	@echo "  make run               - Run the server"
-	@echo "  make dev               - Run with hot reload"
-	@echo "  make test-health       - Test health endpoint"
-	@echo "  make api-identity-01   - Run all identity checks via API"
-	@echo "  make api-identity-01-XX - Run specific identity check via API"
-	@echo "  make cli-identity-01   - Run all identity checks via CLI"
-	@echo "  make cli-identity-01-XX - Run specific identity check via CLI"
-	@echo "  make check-all         - Run all checks"
+	@echo "Server commands:"
+	@echo "  make run                  - Run the server"
+	@echo "  make dev                  - Run with hot reload"
+	@echo "  make test-health          - Test health endpoint"
+	@echo ""
+	@echo "CLI commands:"
+	@echo "  make cli-identity-XX      - Run specific identity check"
+	@echo "  make cli-dashboard-XX     - Run specific dashboard check"
+	@echo "  make cli-keymanager-XX    - Run specific keymanager check"
+	@echo "  make cli-check-all        - Run all checks"
+	@echo ""
+	@echo "API commands:"
+	@echo "  make api-identity-XX      - Run specific identity check via API"
+	@echo "  make api-dashboard-XX     - Run specific dashboard check via API"
+	@echo "  make api-keymanager-XX    - Run specific keymanager check via API"
+	@echo ""
+	@echo "Development commands:"
+	@echo "  make build                - Build the binary"
+	@echo "  make clean                - Clean build files"
+	@echo "  make swagger-init         - Generate Swagger documentation"
+	@echo "  make swagger-fmt          - Format Swagger documentation"
