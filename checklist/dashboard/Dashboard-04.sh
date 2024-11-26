@@ -35,11 +35,15 @@ else
     fi
 fi
 
+# Get current timestamp in ISO 8601 format
+TIMESTAMP=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
+
 # Output JSON result
 cat <<EOF
 {
     "description": "$DESCRIPTION",
     "result": "$RESULT",
-    "details": "$DETAILS"
+    "details": "$DETAILS",
+    "timestamp": "$TIMESTAMP"
 }
 EOF

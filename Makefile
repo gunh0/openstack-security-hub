@@ -26,15 +26,10 @@ clean:
 	$(GOCLEAN)
 	rm -f $(BINARY_NAME)
 	rm -rf ./tmp
-	rm -rf ./docs
 
 # Generate Swagger documentation
 swagger-init:
 	$(SWAG) init
-
-# Format Swagger documentation
-swagger-fmt:
-	$(SWAG) fmt
 
 # Run the server (no arguments for server mode)
 run: swagger-init

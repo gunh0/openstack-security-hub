@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/gunh0/openstack-security-hub/checklist"
 	"golang.org/x/crypto/ssh"
@@ -12,6 +13,7 @@ import (
 
 // Common function to check file ownership
 func checkFileOwnership(client *ssh.Client, filepath string) checklist.CheckResult {
+	currentTime := time.Now().UTC().Format(time.RFC3339)
 	session, err := client.NewSession()
 	if err != nil {
 		return checklist.CheckResult{
@@ -37,6 +39,7 @@ func checkFileOwnership(client *ssh.Client, filepath string) checklist.CheckResu
 			Result:      "[ERROR]",
 			Description: fmt.Sprintf("Is user/group ownership of %s set to keystone?", filepath),
 			Details:     fmt.Sprintf("Failed to execute command: %v", err),
+			Timestamp:   currentTime,
 		}
 	}
 
@@ -46,6 +49,7 @@ func checkFileOwnership(client *ssh.Client, filepath string) checklist.CheckResu
 			Result:      "[NA]",
 			Description: fmt.Sprintf("Is user/group ownership of %s set to keystone?", filepath),
 			Details:     "File does not exist",
+			Timestamp:   currentTime,
 		}
 	}
 
@@ -55,6 +59,7 @@ func checkFileOwnership(client *ssh.Client, filepath string) checklist.CheckResu
 			Result:      "[PASS]",
 			Description: fmt.Sprintf("Is user/group ownership of %s set to keystone?", filepath),
 			Details:     fmt.Sprintf("Current ownership is correct: %s", currentOwnership),
+			Timestamp:   currentTime,
 		}
 	}
 
@@ -62,17 +67,20 @@ func checkFileOwnership(client *ssh.Client, filepath string) checklist.CheckResu
 		Result:      "[FAIL]",
 		Description: fmt.Sprintf("Is user/group ownership of %s set to keystone?", filepath),
 		Details:     fmt.Sprintf("Current ownership: %s (expected: keystone keystone)", currentOwnership),
+		Timestamp:   currentTime,
 	}
 }
 
 // checkFilePermissions checks if file permissions are set correctly
 func checkFilePermissions(client *ssh.Client, filepath string, isDirectory bool) checklist.CheckResult {
+	currentTime := time.Now().UTC().Format(time.RFC3339)
 	session, err := client.NewSession()
 	if err != nil {
 		return checklist.CheckResult{
 			Result:      "[ERROR]",
 			Description: fmt.Sprintf("Are strict permissions set for %s?", filepath),
 			Details:     fmt.Sprintf("Failed to create SSH session: %v", err),
+			Timestamp:   currentTime,
 		}
 	}
 	defer session.Close()
@@ -92,6 +100,7 @@ func checkFilePermissions(client *ssh.Client, filepath string, isDirectory bool)
 			Result:      "[ERROR]",
 			Description: fmt.Sprintf("Are strict permissions set for %s?", filepath),
 			Details:     fmt.Sprintf("Failed to execute command: %v", err),
+			Timestamp:   currentTime,
 		}
 	}
 
@@ -101,6 +110,7 @@ func checkFilePermissions(client *ssh.Client, filepath string, isDirectory bool)
 			Result:      "[NA]",
 			Description: fmt.Sprintf("Are strict permissions set for %s?", filepath),
 			Details:     "File does not exist",
+			Timestamp:   currentTime,
 		}
 	}
 
@@ -125,6 +135,7 @@ func checkFilePermissions(client *ssh.Client, filepath string, isDirectory bool)
 			Result:      "[PASS]",
 			Description: fmt.Sprintf("Are strict permissions set for %s?", filepath),
 			Details:     fmt.Sprintf("Current permissions: %s (meets or exceeds required: %s)", currentPerms, expectedPerms),
+			Timestamp:   currentTime,
 		}
 	}
 
@@ -132,6 +143,7 @@ func checkFilePermissions(client *ssh.Client, filepath string, isDirectory bool)
 		Result:      "[FAIL]",
 		Description: fmt.Sprintf("Are strict permissions set for %s?", filepath),
 		Details:     fmt.Sprintf("Current permissions: %s (should be %s or stricter)", currentPerms, expectedPerms),
+		Timestamp:   currentTime,
 	}
 }
 

@@ -19,10 +19,10 @@ else
     echo "[*] Checking file ownership"
     CURRENT_USER=$(stat -c '%U' $CONFIG_FILE)
     CURRENT_GROUP=$(stat -c '%G' $CONFIG_FILE)
-    
+
     echo "[*] Current ownership: $CURRENT_USER:$CURRENT_GROUP"
     echo "[*] Expected ownership: $EXPECTED_USER:$EXPECTED_GROUP"
-    
+
     if [ "$CURRENT_USER" == "$EXPECTED_USER" ] && [ "$CURRENT_GROUP" == "$EXPECTED_GROUP" ]; then
         DETAILS="Config file is owned by $CURRENT_USER:$CURRENT_GROUP as expected"
     else
@@ -31,10 +31,15 @@ else
     fi
 fi
 
+# Get current timestamp in ISO 8601 format
+TIMESTAMP=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
+
+# Output JSON result
 cat <<EOF
 {
-  "description": "$DESCRIPTION",
-  "result": "$RESULT",
-  "details": "$DETAILS"
+    "description": "$DESCRIPTION",
+    "result": "$RESULT",
+    "details": "$DETAILS",
+    "timestamp": "$TIMESTAMP"
 }
 EOF

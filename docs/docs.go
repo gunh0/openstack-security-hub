@@ -23,16 +23,16 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/check/identity-01": {
+        "/check/dashboard-01": {
             "get": {
-                "description": "Execute all Identity-01 series security checks for OpenStack",
+                "description": "Configuration files contain critical parameters and information required for smooth functioning of the component. If an unprivileged user, either intentionally or accidentally modifies or deletes any of the parameters or the file itself then it would cause severe availability issues causing a denial of service to the other end users. Thus user ownership of such critical configuration files must be set to root and group ownership must be set to horizon.",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "identity"
+                    "dashboard"
                 ],
-                "summary": "Run all Identity-01 security checks",
+                "summary": "Is user/group ownership of config files set to root/horizon?Is user/group of config files set to root/horizon?",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -42,13 +42,27 @@ const docTemplate = `{
                                 "$ref": "#/definitions/checklist.CheckResult"
                             }
                         }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
+                    }
+                }
+            }
+        },
+        "/check/identity-01": {
+            "get": {
+                "description": "Configuration files contain critical parameters and information required for smooth functioning of the component. If an unprivileged user, either intentionally or accidentally modifies or deletes any of the parameters or the file itself then it would cause severe availability issues causing a denial of service to the other end users. Thus user and group ownership of such critical configuration files must be set to that component owner. Additionally, the containing directory should have the same ownership to ensure that new files are owned correctly.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "identity"
+                ],
+                "summary": "Is user/group ownership of config files set to keystone?",
+                "responses": {
+                    "200": {
+                        "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/checklist.CheckResult"
                             }
                         }
                     }
@@ -57,28 +71,19 @@ const docTemplate = `{
         },
         "/check/identity-01-01": {
             "get": {
-                "description": "Check Identity configuration security",
+                "description": "Configuration files contain critical parameters and information required for smooth functioning of the component. If an unprivileged user, either intentionally or accidentally modifies or deletes any of the parameters or the file itself then it would cause severe availability issues causing a denial of service to the other end users. Thus user and group ownership of such critical configuration files must be set to that component owner. Additionally, the containing directory should have the same ownership to ensure that new files are owned correctly.",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "identity"
                 ],
-                "summary": "Run Identity-01-01 check",
+                "summary": "Run Identity-01-01 (/etc/keystone/keystone.conf)",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/checklist.CheckResult"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
                         }
                     }
                 }
@@ -86,31 +91,35 @@ const docTemplate = `{
         },
         "/check/identity-01-02": {
             "get": {
-                "description": "Check Identity configuration security",
+                "description": "Configuration files contain critical parameters and information required for smooth functioning of the component. If an unprivileged user, either intentionally or accidentally modifies or deletes any of the parameters or the file itself then it would cause severe availability issues causing a denial of service to the other end users. Thus user and group ownership of such critical configuration files must be set to that component owner. Additionally, the containing directory should have the same ownership to ensure that new files are owned correctly.",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "identity"
                 ],
-                "summary": "Run Identity-01-02 check",
+                "summary": "Run Identity-01-02 (/etc/keystone/keystone-paste.ini)",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/checklist.CheckResult"
                         }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
                     }
                 }
+            }
+        },
+        "/health": {
+            "get": {
+                "description": "Check if the API server is running",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "health"
+                ],
+                "summary": "Health check endpoint",
+                "responses": {}
             }
         }
     },

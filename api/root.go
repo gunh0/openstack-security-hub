@@ -9,7 +9,6 @@ import (
 func RegisterRoutes(router *gin.Engine) {
 	api := router.Group("/api/v1")
 
-	// Health check
 	api.GET("/health", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"status":  "ok",
@@ -19,5 +18,17 @@ func RegisterRoutes(router *gin.Engine) {
 
 	// Register service-specific routes
 	handler.RegisterIdentityRoutes(api)
-	// handler.RegisterDashboardRoutes(api)
+	handler.RegisterDashboardRoutes(api)
+}
+
+// @Summary     Health check endpoint
+// @Description Check if the API server is running
+// @Tags        health
+// @Produce     json
+// @Router      /health [get]
+func healthCheck(c *gin.Context) {
+	c.JSON(200, gin.H{
+		"status":  "ok",
+		"message": "OpenStack Security Hub is running",
+	})
 }

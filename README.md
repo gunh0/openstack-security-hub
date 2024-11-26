@@ -29,32 +29,35 @@
 
 **This book provides best practices and conceptual information about securing an OpenStack cloud.**
 
-- [identity-01] Is user/group ownership of config files set to keystone?
+- **Identity**
+- [ ] [identity-01] Is user/group ownership of config files set to keystone?
   - [x] [identity-01-01] `/etc/keystone/keystone.conf`
-  - [x] [identity-01-02] `/etc/keystone/keystone-paste.ini`
-  - [x] [identity-01-03] `/etc/keystone/policy.json`
-  - [x] [identity-01-04] `/etc/keystone/logging.conf`
-  - [x] [identity-01-05] `/etc/keystone/ssl/certs/signing_cert.pem`
-  - [x] [identity-01-06] `/etc/keystone/ssl/private/signing_key.pem`
-  - [x] [identity-01-07] `/etc/keystone/ssl/certs/ca.pem`
-  - [x] [identity-01-08] `/etc/keystone`
-- [identity-02] Are strict permissions set for Identity configuration files?
-  - [x] [identity-02-01] `/etc/keystone/keystone.conf`
-  - [x] [identity-02-02] `/etc/keystone/keystone-paste.ini`
-  - [x] [identity-02-03] `/etc/keystone/policy.json`
-  - [x] [identity-02-04] `/etc/keystone/logging.conf`
-  - [x] [identity-02-05] `/etc/keystone/ssl/certs/signing_cert.pem`
-  - [x] [identity-02-06] `/etc/keystone/ssl/private/signing_key.pem`
-  - [x] [identity-02-07] `/etc/keystone/ssl/certs/ca.pem`
-  - [x] [identity-02-08] `/etc/keystone`
-- [x] [identity-03] is TLS enabled for Identity?
+  - [ ] [identity-01-02] `/etc/keystone/keystone-paste.ini`
+  - [ ] [identity-01-03] `/etc/keystone/policy.json`
+  - [ ] [identity-01-04] `/etc/keystone/logging.conf`
+  - [ ] [identity-01-05] `/etc/keystone/ssl/certs/signing_cert.pem`
+  - [ ] [identity-01-06] `/etc/keystone/ssl/private/signing_key.pem`
+  - [ ] [identity-01-07] `/etc/keystone/ssl/certs/ca.pem`
+  - [ ] [identity-01-08] `/etc/keystone`
+- [ ] [identity-02] Are strict permissions set for Identity configuration files?
+  - [ ] [identity-02-01] `/etc/keystone/keystone.conf`
+  - [ ] [identity-02-02] `/etc/keystone/keystone-paste.ini`
+  - [ ] [identity-02-03] `/etc/keystone/policy.json`
+  - [ ] [identity-02-04] `/etc/keystone/logging.conf`
+  - [ ] [identity-02-05] `/etc/keystone/ssl/certs/signing_cert.pem`
+  - [ ] [identity-02-06] `/etc/keystone/ssl/private/signing_key.pem`
+  - [ ] [identity-02-07] `/etc/keystone/ssl/certs/ca.pem`
+  - [ ] [identity-02-08] `/etc/keystone`
+- [ ] [identity-03] is TLS enabled for Identity?
 - [identity-04] (Obsolete)
-- [x] [identity-05] Is max_request_body_size set to default (114688)?
-- [x] [identity-06] Disable admin token in /etc/keystone/keystone.conf
+- [ ] [identity-05] Is max_request_body_size set to default (114688)?
+- [ ] [identity-06] Disable admin token in /etc/keystone/keystone.conf
+- **Dashboard**
 - [x] [dashboard-01] Is user/group of config files set to root/horizon?
 - [ ] [dashboard-02] Are strict permissions set for horizon configuration files?
 - [ ] [dashboard-03] Is DISALLOW_IFRAME_EMBED parameter set to True?
-- [x] [dashboard-04] Is CSRF_COOKIE_SECURE parameter set to True?
-- [x] [dashboard-05] Is SESSION_COOKIE_SECURE parameter set to True?
-- [key-manager-01] Is user/group ownership of config files set to barbican?
-  - [x] [key-manager-01-01] `/etc/barbican/barbican.conf`
+- [ ] [dashboard-04] Is CSRF_COOKIE_SECURE parameter set to True?
+- [ ] [dashboard-05] Is SESSION_COOKIE_SECURE parameter set to True?
+- **Secrets Management**
+- [ ] [key-manager-01] Is user/group ownership of config files set to barbican?
+  - [ ] [key-manager-01-01] `/etc/barbican/barbican.conf`

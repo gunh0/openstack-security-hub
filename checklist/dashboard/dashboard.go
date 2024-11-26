@@ -4,6 +4,7 @@ package dashboard
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/gunh0/openstack-security-hub/checklist"
 	"github.com/gunh0/openstack-security-hub/util"
@@ -12,6 +13,7 @@ import (
 
 // CheckDashboard01 checks if user/group ownership of config files is set to root/horizon
 func CheckDashboard01(client *ssh.Client) checklist.CheckResult {
+	currentTime := time.Now().UTC().Format(time.RFC3339)
 	const (
 		description = "Is user/group of config files set to root/horizon?"
 	)
@@ -22,6 +24,7 @@ func CheckDashboard01(client *ssh.Client) checklist.CheckResult {
 			Description: description,
 			Result:      "[ERROR]",
 			Details:     fmt.Sprintf("Failed to create SSH session: %v", err),
+			Timestamp:   currentTime,
 		}
 	}
 	defer session.Close()
@@ -29,17 +32,17 @@ func CheckDashboard01(client *ssh.Client) checklist.CheckResult {
 	// Check file permissions and ownership
 	cmd := `
 		if [ ! -f "/etc/openstack-dashboard/local_settings.py" ]; then
-           echo "FILE_NOT_FOUND"
-           exit 0
-       	fi
+            echo "FILE_NOT_FOUND"
+            exit 0
+		fi
 
 		if [ ! -r "/etc/openstack-dashboard/local_settings.py" ]; then
-           echo "PERMISSION_DENIED"
-           exit 0
-       	fi
+            echo "PERMISSION_DENIED"
+            exit 0
+		fi
 
 		ownership=$(stat -L -c "%U %G" /etc/openstack-dashboard/local_settings.py 2>/dev/null)
-	    echo "OWNERSHIP:$ownership"
+		echo "OWNERSHIP:$ownership"
 	`
 
 	output, err := session.CombinedOutput(cmd)
@@ -52,12 +55,14 @@ func CheckDashboard01(client *ssh.Client) checklist.CheckResult {
 			Description: description,
 			Result:      "[NA]",
 			Details:     "Cannot check local_settings.py: permission denied",
+			Timestamp:   currentTime,
 		}
 	case strings.Contains(result, "FILE_NOT_FOUND"):
 		return checklist.CheckResult{
 			Description: description,
 			Result:      "[NA]",
 			Details:     "local_settings.py not found",
+			Timestamp:   currentTime,
 		}
 	}
 
@@ -71,6 +76,7 @@ func CheckDashboard01(client *ssh.Client) checklist.CheckResult {
 				Description: description,
 				Result:      "[PASS]",
 				Details:     "File ownership is correctly set to root:horizon",
+				Timestamp:   currentTime,
 			}
 		}
 
@@ -78,6 +84,7 @@ func CheckDashboard01(client *ssh.Client) checklist.CheckResult {
 			Description: description,
 			Result:      "[FAIL]",
 			Details:     fmt.Sprintf("Current ownership is %s (expected: root horizon)", ownership),
+			Timestamp:   currentTime,
 		}
 	}
 
@@ -85,6 +92,7 @@ func CheckDashboard01(client *ssh.Client) checklist.CheckResult {
 		Description: description,
 		Result:      "[ERROR]",
 		Details:     "Failed to determine file ownership",
+		Timestamp:   currentTime,
 	}
 }
 
