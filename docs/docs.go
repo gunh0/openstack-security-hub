@@ -30,9 +30,78 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "dashboard"
+                    "Dashboard"
                 ],
                 "summary": "Is user/group ownership of config files set to root/horizon?Is user/group of config files set to root/horizon?",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/checklist.CheckResult"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/check/dashboard-04": {
+            "get": {
+                "description": "CSRF (Cross-site request forgery) is an attack which forces an end user to execute unauthorized commands on a web application in which he/she is currently authenticated. A successful CSRF exploit can compromise end user data and operations. If the targeted end user has admin privileges, this can compromise the entire web application.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Dashboard"
+                ],
+                "summary": "Is CSRF_COOKIE_SECURE parameter set to True?",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/checklist.CheckResult"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/check/dashboard-05": {
+            "get": {
+                "description": "The “SECURE” cookie attribute instructs web browsers to only send the cookie through an encrypted HTTPS (SSL/TLS) connection. This session protection mechanism is mandatory to prevent the disclosure of the session ID through MitM (Man-in-the-Middle) attacks. It ensures that an attacker cannot simply capture the session ID from web browser traffic.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Dashboard"
+                ],
+                "summary": "Is SESSION_COOKIE_SECURE parameter set to True?",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/checklist.CheckResult"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/check/dashboard-06": {
+            "get": {
+                "description": "The “HTTPONLY” cookie attribute instructs web browsers not to allow scripts (e.g. JavaScript or VBscript) an ability to access the cookies via the DOM document.cookie object. This session ID protection is mandatory to prevent session ID stealing through XSS attacks.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Dashboard"
+                ],
+                "summary": "Is SESSION_COOKIE_HTTPONLY parameter set to True?",
                 "responses": {
                     "200": {
                         "description": "OK",

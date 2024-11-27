@@ -113,3 +113,11 @@ func CheckDashboard05(client *ssh.Client) checklist.CheckResult {
 		"Is SESSION_COOKIE_SECURE parameter set to True?",
 	)
 }
+
+func CheckDashboard06(client *ssh.Client) checklist.CheckResult {
+	return util.ExecuteScriptAndGetResult(
+		client,
+		"checklist/dashboard/dashboard-06.sh",
+		"Is SESSION_COOKIE_HTTPONLY parameter set to True?",
+	)
+}

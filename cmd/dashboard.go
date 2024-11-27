@@ -27,9 +27,16 @@ func initDashboardCommands() {
 		Run:   runDashboard05Checks,
 	}
 
+	dashboard06Cmd := &cobra.Command{
+		Use:   "dashboard-06",
+		Short: "Is SESSION_COOKIE_HTTPONLY parameter set to True?",
+		Run:   runDashboard06Checks,
+	}
+
 	RootCmd.AddCommand(dashboard01Cmd)
 	RootCmd.AddCommand(dashboard04Cmd)
 	RootCmd.AddCommand(dashboard05Cmd)
+	RootCmd.AddCommand(dashboard06Cmd)
 }
 
 func runDashboard01Checks(cmd *cobra.Command, args []string) {
@@ -65,5 +72,17 @@ func runDashboard05Checks(cmd *cobra.Command, args []string) {
 	defer client.Close()
 
 	result := dashboard.CheckDashboard05(client)
+	util.PrettyPrintResult(result)
+}
+
+func runDashboard06Checks(cmd *cobra.Command, args []string) {
+	client, err := util.GetSSHClient()
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return
+	}
+	defer client.Close()
+
+	result := dashboard.CheckDashboard06(client)
 	util.PrettyPrintResult(result)
 }
