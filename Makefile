@@ -52,24 +52,19 @@ cli-identity-%:
 cli-dashboard-%:
 	$(GORUN) $(MAIN_FILE) dashboard-$*
 
-cli-keymanager-%:
-	$(GORUN) $(MAIN_FILE) keymanager-$*
+cli-key-manager-%:
+	$(GORUN) $(MAIN_FILE) key-manager-$*
 
 # Run all checks via CLI
 cli-check-all:
 	@echo "Running all Identity checks..."
-	$(MAKE) cli-identity-01
-	$(MAKE) cli-identity-02
-	$(MAKE) cli-identity-03
-	$(MAKE) cli-identity-05
+	$(MAKE) cli-identity-01-01
 	@echo "Running all Dashboard checks..."
-	$(MAKE) cli-dashboard-01
-	$(MAKE) cli-dashboard-02
-	$(MAKE) cli-dashboard-03
 	$(MAKE) cli-dashboard-04
 	$(MAKE) cli-dashboard-05
-	@echo "Running all Keymanager checks..."
-	$(MAKE) cli-keymanager-01
+	$(MAKE) cli-dashboard-06
+	@echo "Running all Secrets Management checks..."
+	$(MAKE) cli-key-manager-01-01
 
 # API checks
 api-identity-%:
@@ -78,8 +73,8 @@ api-identity-%:
 api-dashboard-%:
 	curl -s $(API_BASE)/check/dashboard-$* | python3 -m json.tool
 
-api-keymanager-%:
-	curl -s $(API_BASE)/check/keymanager-$* | python3 -m json.tool
+api-key-manager-%:
+	curl -s $(API_BASE)/check/key-manager-$* | python3 -m json.tool
 
 # Help
 help:

@@ -19,6 +19,7 @@ func RegisterRoutes(router *gin.Engine) {
 	// Register service-specific routes
 	handler.RegisterIdentityRoutes(api)
 	handler.RegisterDashboardRoutes(api)
+	handler.RegisterKeyManagerRoutes(api)
 }
 
 // @Summary     Health check endpoint

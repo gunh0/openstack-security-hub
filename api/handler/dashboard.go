@@ -9,10 +9,10 @@ import (
 )
 
 func RegisterDashboardRoutes(router *gin.RouterGroup) {
-	router.GET("/check/dashboard-01", handleDashboard01)
-	router.GET("/check/dashboard-04", handleDashboard04)
-	router.GET("/check/dashboard-05", handleDashboard05)
-	router.GET("/check/dashboard-06", handleDashboard06)
+	router.GET("/check/dashboard-01", checkDashboard01)
+	router.GET("/check/dashboard-04", checkDashboard04)
+	router.GET("/check/dashboard-05", checkDashboard05)
+	router.GET("/check/dashboard-06", checkDashboard06)
 }
 
 // @Summary	 Is user/group ownership of config files set to root/horizon?Is user/group of config files set to root/horizon?
@@ -21,7 +21,7 @@ func RegisterDashboardRoutes(router *gin.RouterGroup) {
 // @Produce		json
 // @Success		200	{array}	checklist.CheckResult
 // @Router		/check/dashboard-01	[get]
-func handleDashboard01(c *gin.Context) {
+func checkDashboard01(c *gin.Context) {
 	client, err := util.GetSSHClient()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -43,7 +43,7 @@ func handleDashboard01(c *gin.Context) {
 // @Produce json
 // @Success 200 {array} checklist.CheckResult
 // @Router /check/dashboard-04 [get]
-func handleDashboard04(c *gin.Context) {
+func checkDashboard04(c *gin.Context) {
 	client, err := util.GetSSHClient()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -65,7 +65,7 @@ func handleDashboard04(c *gin.Context) {
 // @Produce json
 // @Success 200 {array} checklist.CheckResult
 // @Router /check/dashboard-05 [get]
-func handleDashboard05(c *gin.Context) {
+func checkDashboard05(c *gin.Context) {
 	client, err := util.GetSSHClient()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -87,7 +87,7 @@ func handleDashboard05(c *gin.Context) {
 // @Produce json
 // @Success 200 {array} checklist.CheckResult
 // @Router /check/dashboard-06 [get]
-func handleDashboard06(c *gin.Context) {
+func checkDashboard06(c *gin.Context) {
 	client, err := util.GetSSHClient()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{

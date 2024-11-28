@@ -59,6 +59,12 @@
 - [x] [dashboard-04] Is CSRF_COOKIE_SECURE parameter set to True?
 - [x] [dashboard-05] Is SESSION_COOKIE_SECURE parameter set to True?
 - [x] [dashboard-06] Is SESSION_COOKIE_HTTPONLY parameter set to True?
+- [ ] [dashboard-07] Is PASSWORD_AUTOCOMPLETE set to False?
+- [ ] [dashboard-08] Is DISABLE_PASSWORD_REVEAL set to True?
+- **Networking**
+- [ ] [networking-01] Is user/group ownership of config files set to root/neutron?
+  - [ ] [networking-01-01] `/etc/neutron/neutron.conf`
+  - [ ] [networking-01-02] `/etc/neutron/api-paste.ini`
 - **Secrets Management**
 - [ ] [key-manager-01] Is user/group ownership of config files set to barbican?
-  - [ ] [key-manager-01-01] `/etc/barbican/barbican.conf`
+  - [x] [key-manager-01-01] `/etc/barbican/barbican.conf`

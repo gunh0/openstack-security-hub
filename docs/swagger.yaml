@@ -140,7 +140,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/checklist.CheckResult'
-      summary: Run Identity-01-01 (/etc/keystone/keystone.conf)
+      summary: Is user/group ownership of config files set to keystone? (/etc/keystone/keystone.conf)
       tags:
       - identity
   /check/identity-01-02:
@@ -163,6 +163,26 @@ paths:
       summary: Run Identity-01-02 (/etc/keystone/keystone-paste.ini)
       tags:
       - identity
+  /check/key-manager-01-01:
+    get:
+      description: Configuration files contain critical parameters and information
+        required for smooth functioning of the component. If an unprivileged user,
+        either intentionally or accidentally, modifies or deletes any of the parameters
+        or the file itself then it would cause severe availability issues resulting
+        in a denial of service to the other end users. User ownership of such critical
+        configuration files must be set to root and group ownership must be set to
+        barbican. Additionally, the containing directory should have the same ownership
+        to ensure that new files are owned correctly.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/checklist.CheckResult'
+      summary: Is the ownership of config files set to root/barbican? (/etc/barbican/barbican.conf)
+      tags:
+      - Secrets Management
   /health:
     get:
       description: Check if the API server is running

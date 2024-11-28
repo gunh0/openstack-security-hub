@@ -62,24 +62,7 @@ func handleIdentity01(c *gin.Context) {
 	c.JSON(http.StatusOK, results)
 }
 
-// Utility function to reduce duplication
-func handleIdentityCheck(c *gin.Context, checkFn func(*ssh.Client) checklist.CheckResult) {
-	client, err := util.GetSSHClient()
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"status":  "error",
-			"message": "Failed to connect to server",
-			"error":   err.Error(),
-		})
-		return
-	}
-	defer client.Close()
-
-	result := checkFn(client)
-	c.JSON(http.StatusOK, result)
-}
-
-// @Summary     Run Identity-01-01 (/etc/keystone/keystone.conf)
+// @Summary     Is user/group ownership of config files set to keystone? (/etc/keystone/keystone.conf)
 // @Description Configuration files contain critical parameters and information required for smooth functioning of the component. If an unprivileged user, either intentionally or accidentally modifies or deletes any of the parameters or the file itself then it would cause severe availability issues causing a denial of service to the other end users. Thus user and group ownership of such critical configuration files must be set to that component owner. Additionally, the containing directory should have the same ownership to ensure that new files are owned correctly.
 // @Tags        identity
 // @Produce     json
