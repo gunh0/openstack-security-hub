@@ -10,6 +10,7 @@ import (
 
 func RegisterKeyManagerRoutes(router *gin.RouterGroup) {
 	router.GET("/check/key-manager-01-01", checkKeyManager0101)
+	router.GET("/check/key-manager-03", checkKeyManager03)
 }
 
 // @Summary     Is the ownership of config files set to root/barbican? (/etc/barbican/barbican.conf)
@@ -31,5 +32,27 @@ func checkKeyManager0101(c *gin.Context) {
 	defer client.Close()
 
 	result := keymanager.CheckKeyManager0101(client)
+	c.JSON(http.StatusOK, result)
+}
+
+// @Summary     Is OpenStack Identity used for authentication?
+// @Description OpenStack supports various authentication strategies like noauth and keystone. If the noauth strategy is used then the users can interact with OpenStack services without any authentication. This could be a potential risk since an attacker might gain unauthorized access to the OpenStack components. We strongly recommend that all services must be authenticated with keystone using their service accounts.
+// @Tags        Secrets Management
+// @Produce     json
+// @Success     200 {object} checklist.CheckResult
+// @Router      /check/key-manager-03 [get]
+func checkKeyManager03(c *gin.Context) {
+	client, err := util.GetSSHClient()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status":  "error",
+			"message": "Failed to connect to server",
+			"error":   err.Error(),
+		})
+		return
+	}
+	defer client.Close()
+
+	result := keymanager.CheckKeyManager03(client)
 	c.JSON(http.StatusOK, result)
 }

@@ -65,6 +65,16 @@
 - [ ] [networking-01] Is user/group ownership of config files set to root/neutron?
   - [ ] [networking-01-01] `/etc/neutron/neutron.conf`
   - [ ] [networking-01-02] `/etc/neutron/api-paste.ini`
+  - [ ] [networking-01-03] `/etc/neutron/policy.json`
+  - [ ] [networking-01-04] `/etc/neutron/rootwrap.conf`
+  - [ ] [networking-01-05] `/etc/neutron`
+- [ ] [networking-02] Are strict permissions set for configuration files?
+- [ ] [networking-03] Is keystone used for authentication?
+- [ ] [networking-04] Is secure protocol used for authentication?
+- [ ] [networking-05] Is TLS enabled on Neutron API server?¶
 - **Secrets Management**
 - [ ] [key-manager-01] Is user/group ownership of config files set to barbican?
   - [x] [key-manager-01-01] `/etc/barbican/barbican.conf`
+- [ ] [key-manager-02] Are strict permissions set for configuration files?
+- [x] [key-manager-03] Is OpenStack Identity used for authentication?
+- [ ] [key-manager-04] Is TLS enabled for authentication?¶

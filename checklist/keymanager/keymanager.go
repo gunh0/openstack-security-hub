@@ -13,3 +13,11 @@ func CheckKeyManager0101(client *ssh.Client) checklist.CheckResult {
 		"Is the ownership of config files set to root/barbican?",
 	)
 }
+
+func CheckKeyManager03(client *ssh.Client) checklist.CheckResult {
+	return util.ExecuteScriptAndGetResult(
+		client,
+		"checklist/keymanager/key-manager-03.sh",
+		"Is OpenStack Identity used for authentication?",
+	)
+}

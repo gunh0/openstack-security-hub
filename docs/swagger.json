@@ -191,6 +191,26 @@
                 }
             }
         },
+        "/check/key-manager-03": {
+            "get": {
+                "description": "OpenStack supports various authentication strategies like noauth and keystone. If the noauth strategy is used then the users can interact with OpenStack services without any authentication. This could be a potential risk since an attacker might gain unauthorized access to the OpenStack components. We strongly recommend that all services must be authenticated with keystone using their service accounts.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Secrets Management"
+                ],
+                "summary": "Is OpenStack Identity used for authentication?",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/checklist.CheckResult"
+                        }
+                    }
+                }
+            }
+        },
         "/health": {
             "get": {
                 "description": "Check if the API server is running",
