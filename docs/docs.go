@@ -122,7 +122,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "identity"
+                    "Identity"
                 ],
                 "summary": "Is user/group ownership of config files set to keystone?",
                 "responses": {
@@ -145,7 +145,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "identity"
+                    "Identity"
                 ],
                 "summary": "Is user/group ownership of config files set to keystone? (/etc/keystone/keystone.conf)",
                 "responses": {
@@ -165,9 +165,129 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "identity"
+                    "Identity"
                 ],
-                "summary": "Run Identity-01-02 (/etc/keystone/keystone-paste.ini)",
+                "summary": "Is user/group ownership of config files set to keystone? (/etc/keystone/keystone-paste.ini)",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/checklist.CheckResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/check/identity-01-03": {
+            "get": {
+                "description": "Configuration files contain critical parameters and information required for smooth functioning of the component. If an unprivileged user, either intentionally or accidentally modifies or deletes any of the parameters or the file itself then it would cause severe availability issues causing a denial of service to the other end users. Thus user and group ownership of such critical configuration files must be set to that component owner. Additionally, the containing directory should have the same ownership to ensure that new files are owned correctly.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Identity"
+                ],
+                "summary": "Is user/group ownership of config files set to keystone? (/etc/keystone/policy.json)",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/checklist.CheckResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/check/identity-01-04": {
+            "get": {
+                "description": "Configuration files contain critical parameters and information required for smooth functioning of the component. If an unprivileged user, either intentionally or accidentally modifies or deletes any of the parameters or the file itself then it would cause severe availability issues causing a denial of service to the other end users. Thus user and group ownership of such critical configuration files must be set to that component owner. Additionally, the containing directory should have the same ownership to ensure that new files are owned correctly.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Identity"
+                ],
+                "summary": "Is user/group ownership of config files set to keystone? (/etc/keystone/logging.conf)",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/checklist.CheckResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/check/identity-01-05": {
+            "get": {
+                "description": "Configuration files contain critical parameters and information required for smooth functioning of the component. If an unprivileged user, either intentionally or accidentally modifies or deletes any of the parameters or the file itself then it would cause severe availability issues causing a denial of service to the other end users. Thus user and group ownership of such critical configuration files must be set to that component owner. Additionally, the containing directory should have the same ownership to ensure that new files are owned correctly.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Identity"
+                ],
+                "summary": "Is user/group ownership of config files set to keystone? (/etc/keystone/ssl/certs/signing_cert.pem)",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/checklist.CheckResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/check/identity-01-06": {
+            "get": {
+                "description": "Configuration files contain critical parameters and information required for smooth functioning of the component. If an unprivileged user, either intentionally or accidentally modifies or deletes any of the parameters or the file itself then it would cause severe availability issues causing a denial of service to the other end users. Thus user and group ownership of such critical configuration files must be set to that component owner. Additionally, the containing directory should have the same ownership to ensure that new files are owned correctly.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Identity"
+                ],
+                "summary": "Is user/group ownership of config files set to keystone? (/etc/keystone/ssl/private/signing_key.pem)",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/checklist.CheckResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/check/identity-01-07": {
+            "get": {
+                "description": "Configuration files contain critical parameters and information required for smooth functioning of the component. If an unprivileged user, either intentionally or accidentally modifies or deletes any of the parameters or the file itself then it would cause severe availability issues causing a denial of service to the other end users. Thus user and group ownership of such critical configuration files must be set to that component owner. Additionally, the containing directory should have the same ownership to ensure that new files are owned correctly.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Identity"
+                ],
+                "summary": "Is user/group ownership of config files set to keystone? (/etc/keystone/ssl/certs/ca.pem)",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/checklist.CheckResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/check/identity-01-08": {
+            "get": {
+                "description": "Configuration files contain critical parameters and information required for smooth functioning of the component. If an unprivileged user, either intentionally or accidentally modifies or deletes any of the parameters or the file itself then it would cause severe availability issues causing a denial of service to the other end users. Thus user and group ownership of such critical configuration files must be set to that component owner. Additionally, the containing directory should have the same ownership to ensure that new files are owned correctly.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Identity"
+                ],
+                "summary": "Is user/group ownership of config files set to keystone? (/etc/keystone)",
                 "responses": {
                     "200": {
                         "description": "OK",

@@ -32,13 +32,13 @@
 - **Identity**
 - [ ] [identity-01] Is user/group ownership of config files set to keystone?
   - [x] [identity-01-01] `/etc/keystone/keystone.conf`
-  - [ ] [identity-01-02] `/etc/keystone/keystone-paste.ini`
-  - [ ] [identity-01-03] `/etc/keystone/policy.json`
-  - [ ] [identity-01-04] `/etc/keystone/logging.conf`
-  - [ ] [identity-01-05] `/etc/keystone/ssl/certs/signing_cert.pem`
-  - [ ] [identity-01-06] `/etc/keystone/ssl/private/signing_key.pem`
-  - [ ] [identity-01-07] `/etc/keystone/ssl/certs/ca.pem`
-  - [ ] [identity-01-08] `/etc/keystone`
+  - [x] [identity-01-02] `/etc/keystone/keystone-paste.ini`
+  - [x] [identity-01-03] `/etc/keystone/policy.json`
+  - [x] [identity-01-04] `/etc/keystone/logging.conf`
+  - [x] [identity-01-05] `/etc/keystone/ssl/certs/signing_cert.pem`
+  - [x] [identity-01-06] `/etc/keystone/ssl/private/signing_key.pem`
+  - [x] [identity-01-07] `/etc/keystone/ssl/certs/ca.pem`
+  - [x] [identity-01-08] `/etc/keystone`
 - [ ] [identity-02] Are strict permissions set for Identity configuration files?
   - [ ] [identity-02-01] `/etc/keystone/keystone.conf`
   - [ ] [identity-02-02] `/etc/keystone/keystone-paste.ini`
@@ -61,6 +61,10 @@
 - [x] [dashboard-06] Is SESSION_COOKIE_HTTPONLY parameter set to True?
 - [ ] [dashboard-07] Is PASSWORD_AUTOCOMPLETE set to False?
 - [ ] [dashboard-08] Is DISABLE_PASSWORD_REVEAL set to True?
+- **Compute**
+- **Block Storage**
+- **Image Storage**
+- **Shared File Systems**
 - **Networking**
 - [ ] [networking-01] Is user/group ownership of config files set to root/neutron?
   - [ ] [networking-01-01] `/etc/neutron/neutron.conf`
@@ -71,7 +75,7 @@
 - [ ] [networking-02] Are strict permissions set for configuration files?
 - [ ] [networking-03] Is keystone used for authentication?
 - [ ] [networking-04] Is secure protocol used for authentication?
-- [ ] [networking-05] Is TLS enabled on Neutron API server?¶
+- [ ] [networking-05] Is TLS enabled on Neutron API server?
 - **Secrets Management**
 - [ ] [key-manager-01] Is user/group ownership of config files set to barbican?
   - [x] [key-manager-01-01] `/etc/barbican/barbican.conf`
