@@ -9,11 +9,7 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "contact": {
-            "name": "API Support",
-            "url": "http://www.swagger.io/support",
-            "email": "support@swagger.io"
-        },
+        "contact": {},
         "license": {
             "name": "Apache 2.0",
             "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
@@ -308,6 +304,26 @@ const docTemplate = `{
                     "Secrets Management"
                 ],
                 "summary": "Is the ownership of config files set to root/barbican? (/etc/barbican/barbican.conf)",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/checklist.CheckResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/check/key-manager-01-02": {
+            "get": {
+                "description": "Configuration files contain critical parameters and information required for smooth functioning of the component. If an unprivileged user, either intentionally or accidentally, modifies or deletes any of the parameters or the file itself then it would cause severe availability issues resulting in a denial of service to the other end users. User ownership of such critical configuration files must be set to root and group ownership must be set to barbican. Additionally, the containing directory should have the same ownership to ensure that new files are owned correctly.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Secrets Management"
+                ],
+                "summary": "Is the ownership of config files set to root/barbican? (/etc/barbican/barbican-api-paste.ini)",
                 "responses": {
                     "200": {
                         "description": "OK",

@@ -39,15 +39,8 @@ else
     fi
 fi
 
-# Get current timestamp in ISO 8601 format
+# Get current timestamp
 TIMESTAMP=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
 
-# Output JSON result
-cat <<EOF
-{
-    "description": "$DESCRIPTION",
-    "result": "$RESULT",
-    "details": "$DETAILS",
-    "timestamp": "$TIMESTAMP"
-}
-EOF
+# Output single-line JSON to stdout
+echo "{\"description\":\"$DESCRIPTION\",\"result\":\"$RESULT\",\"details\":\"$DETAILS\",\"timestamp\":\"$TIMESTAMP\"}"

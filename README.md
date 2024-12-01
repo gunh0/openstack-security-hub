@@ -79,6 +79,7 @@
 - **Secrets Management**
 - [ ] [key-manager-01] Is user/group ownership of config files set to barbican?
   - [x] [key-manager-01-01] `/etc/barbican/barbican.conf`
+  - [x] [key-manager-01-02] `/etc/barbican/barbican-api-paste.ini`
 - [ ] [key-manager-02] Are strict permissions set for configuration files?
 - [x] [key-manager-03] Is OpenStack Identity used for authentication?
 - [ ] [key-manager-04] Is TLS enabled for authentication?¶

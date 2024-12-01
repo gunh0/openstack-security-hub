@@ -26,7 +26,7 @@ func GetSSHClient() (*ssh.Client, error) {
 	return ssh.Dial("tcp", os.Getenv("SSH_HOST"), config)
 }
 
-// PrettyPrintResult prints a formatted check result
+// PrettyPrintResult prints a formatted check result with clear visual separation
 func PrettyPrintResult(result checklist.CheckResult) {
 	fmt.Println(strings.Repeat("-", 100))
 	fmt.Printf("Description: %s\n", result.Description)
@@ -36,49 +36,32 @@ func PrettyPrintResult(result checklist.CheckResult) {
 	fmt.Println(strings.Repeat("-", 100))
 }
 
+// SSHClient wraps an ssh.Client to provide additional functionality
 type SSHClient struct {
 	client *ssh.Client
 }
 
-// NewSSHClient creates a new SSH client using environment variables
-func NewSSHClient() (*SSHClient, error) {
-	config := &ssh.ClientConfig{
-		User: os.Getenv("SSH_USER"),
-		Auth: []ssh.AuthMethod{
-			ssh.Password(os.Getenv("SSH_PASSWORD")),
-		},
-		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
-	}
-
-	client, err := ssh.Dial("tcp", os.Getenv("SSH_HOST"), config)
-	if err != nil {
-		return nil, fmt.Errorf("failed to dial: %v", err)
-	}
-
-	return &SSHClient{client: client}, nil
-}
-
-// ExecuteScript executes a script file on the remote host
+// ExecuteScript executes a shell script on the remote host and returns the output
 func (c *SSHClient) ExecuteScript(scriptPath string) (string, error) {
-	// Read local script file
+	// Read the local script file into memory
 	content, err := os.ReadFile(scriptPath)
 	if err != nil {
 		return "", fmt.Errorf("failed to read script: %v", err)
 	}
 
-	// Create new session
+	// Create a new SSH session for script execution
 	session, err := c.client.NewSession()
 	if err != nil {
 		return "", fmt.Errorf("failed to create session: %v", err)
 	}
 	defer session.Close()
 
-	// Create buffers for output
+	// Set up output and error buffers
 	var outputBuffer, errorBuffer bytes.Buffer
 	session.Stdout = &outputBuffer
 	session.Stderr = &errorBuffer
 
-	// Execute script directly using bash
+	// Execute the script using heredoc to handle multiline scripts
 	err = session.Run(fmt.Sprintf("bash -s << 'EOF'\n%s\nEOF", string(content)))
 	if err != nil {
 		if errorBuffer.Len() > 0 {
@@ -90,15 +73,29 @@ func (c *SSHClient) ExecuteScript(scriptPath string) (string, error) {
 	return outputBuffer.String(), nil
 }
 
-// Close closes the SSH connection
+// Close safely terminates the SSH connection
 func (c *SSHClient) Close() error {
 	return c.client.Close()
 }
 
-// ExecuteScriptAndGetResult executes a shell script and returns the parsed CheckResult
+// ExecuteScriptAndGetResult executes a shell script via SSH and returns the parsed CheckResult.
+// It captures and displays the full script output, then extracts and parses the JSON result
+// from the last line of output.
 func ExecuteScriptAndGetResult(client *ssh.Client, scriptPath string, description string) checklist.CheckResult {
+	// Validate SSH client initialization
+	if client == nil {
+		return checklist.CheckResult{
+			Description: description,
+			Result:      "[ERROR]",
+			Details:     "SSH client is nil",
+		}
+	}
+	fmt.Printf("[SSH] Connected to: %v\n", client.RemoteAddr())
+
+	// Create new SSH session
 	session, err := client.NewSession()
 	if err != nil {
+		fmt.Printf("[ERROR] Failed to create SSH session: %v\n", err)
 		return checklist.CheckResult{
 			Description: description,
 			Result:      "[ERROR]",
@@ -107,9 +104,10 @@ func ExecuteScriptAndGetResult(client *ssh.Client, scriptPath string, descriptio
 	}
 	defer session.Close()
 
-	// Get absolute path and check if script exists
+	// Get and validate script path
 	pwd, err := os.Getwd()
 	if err != nil {
+		fmt.Printf("[ERROR] Failed to get working directory: %v\n", err)
 		return checklist.CheckResult{
 			Description: description,
 			Result:      "[ERROR]",
@@ -118,7 +116,11 @@ func ExecuteScriptAndGetResult(client *ssh.Client, scriptPath string, descriptio
 	}
 
 	fullScriptPath := filepath.Join(pwd, scriptPath)
+	fmt.Printf("[INFO] Executing script: %s\n", fullScriptPath)
+
+	// Check script existence
 	if _, err := os.Stat(fullScriptPath); os.IsNotExist(err) {
+		fmt.Printf("[ERROR] Script not found: %s\n", fullScriptPath)
 		return checklist.CheckResult{
 			Description: description,
 			Result:      "[ERROR]",
@@ -129,6 +131,7 @@ func ExecuteScriptAndGetResult(client *ssh.Client, scriptPath string, descriptio
 	// Read script content
 	scriptContent, err := os.ReadFile(fullScriptPath)
 	if err != nil {
+		fmt.Printf("[ERROR] Failed to read script: %v\n", err)
 		return checklist.CheckResult{
 			Description: description,
 			Result:      "[ERROR]",
@@ -136,45 +139,37 @@ func ExecuteScriptAndGetResult(client *ssh.Client, scriptPath string, descriptio
 		}
 	}
 
-	// Execute script and capture output
-	var outputBuf bytes.Buffer
-	session.Stdout = &outputBuf
-	session.Stderr = &outputBuf
-
-	err = session.Run(string(scriptContent)) // Changed from := to =
-	outputStr := outputBuf.String()
-
+	// Execute script and capture output directly
+	output, err := session.CombinedOutput(string(scriptContent))
 	if err != nil {
+		fmt.Printf("[ERROR] Script execution failed: %v\n", err)
 		return checklist.CheckResult{
 			Description: description,
 			Result:      "[ERROR]",
-			Details:     fmt.Sprintf("Script execution failed: %v\nOutput: %s", err, outputStr),
+			Details:     fmt.Sprintf("Script execution failed: %v\nOutput: %s", err, string(output)),
 		}
 	}
 
-	// Debug output (optional)
-	fmt.Printf("Script path: %s\n", fullScriptPath)
-	fmt.Printf("Script output:\n%s", outputStr)
+	// Display full script output
+	fmt.Printf("[SCRIPT OUTPUT]\n%s", string(output))
 
-	// Parse JSON result
-	startIdx := strings.LastIndex(outputStr, "{")
-	endIdx := strings.LastIndex(outputStr, "}")
-
-	if startIdx == -1 || endIdx == -1 || startIdx > endIdx {
+	// Extract JSON from last line and parse result
+	lines := strings.Split(strings.TrimSpace(string(output)), "\n")
+	if len(lines) == 0 {
 		return checklist.CheckResult{
 			Description: description,
 			Result:      "[ERROR]",
-			Details:     fmt.Sprintf("Failed to locate JSON in script output: %s", outputStr),
+			Details:     "No output from script",
 		}
 	}
 
-	jsonStr := outputStr[startIdx : endIdx+1]
+	jsonLine := lines[len(lines)-1]
 	var result checklist.CheckResult
-	if err := json.Unmarshal([]byte(jsonStr), &result); err != nil {
+	if err := json.Unmarshal([]byte(jsonLine), &result); err != nil {
 		return checklist.CheckResult{
 			Description: description,
 			Result:      "[ERROR]",
-			Details:     fmt.Sprintf("Failed to parse JSON result: %v\nOutput: %s", err, outputStr),
+			Details:     fmt.Sprintf("Failed to parse JSON result: %v", err),
 		}
 	}
 

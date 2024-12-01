@@ -15,7 +15,7 @@ MAIN_FILE=main.go
 # API endpoints
 API_BASE=http://localhost:8080/api/v1
 
-.PHONY: build clean run dev test-health api-check cli-check swagger-init swagger-fmt
+.PHONY: build clean run dev test-health api-check cli-check swagger-init
 
 # Build the binary
 build:
@@ -99,4 +99,3 @@ help:
 	@echo "  make build                - Build the binary"
 	@echo "  make clean                - Clean build files"
 	@echo "  make swagger-init         - Generate Swagger documentation"
-	@echo "  make swagger-fmt          - Format Swagger documentation"
