@@ -21,6 +21,7 @@ func RegisterIdentityRoutes(router *gin.RouterGroup) {
 	router.GET("/check/identity-01-06", checkIdentity0106)
 	router.GET("/check/identity-01-07", checkIdentity0107)
 	router.GET("/check/identity-01-08", checkIdentity0108)
+	router.GET("/check/identity-02-01", checkIdentity0201)
 }
 
 // @Summary     Is user/group ownership of config files set to keystone?
@@ -235,5 +236,27 @@ func checkIdentity0108(c *gin.Context) {
 	defer client.Close()
 
 	result := identity.CheckIdentity0108(client)
+	c.JSON(http.StatusOK, result)
+}
+
+// @Summary     Are strict permissions set for Identity configuration files? (/etc/keystone/keystone.conf)
+// @Description Similar to the previous check, it is recommended to set strict access permissions for such configuration files.
+// @Tags        Identity
+// @Produce     json
+// @Success     200 {object} checklist.CheckResult
+// @Router      /check/identity-02-01 [get]
+func checkIdentity0201(c *gin.Context) {
+	client, err := util.GetSSHClient()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status":  "error",
+			"message": "Failed to connect to server",
+			"error":   err.Error(),
+		})
+		return
+	}
+	defer client.Close()
+
+	result := identity.CheckIdentity0201(client)
 	c.JSON(http.StatusOK, result)
 }

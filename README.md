@@ -40,7 +40,7 @@
   - [x] [identity-01-07] `/etc/keystone/ssl/certs/ca.pem`
   - [x] [identity-01-08] `/etc/keystone`
 - [ ] [identity-02] Are strict permissions set for Identity configuration files?
-  - [ ] [identity-02-01] `/etc/keystone/keystone.conf`
+  - [x] [identity-02-01] `/etc/keystone/keystone.conf`
   - [ ] [identity-02-02] `/etc/keystone/keystone-paste.ini`
   - [ ] [identity-02-03] `/etc/keystone/policy.json`
   - [ ] [identity-02-04] `/etc/keystone/logging.conf`

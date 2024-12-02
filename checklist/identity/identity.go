@@ -20,6 +20,7 @@ func checkFileOwnership(client *ssh.Client, filepath string) checklist.CheckResu
 			Result:      "[ERROR]",
 			Description: fmt.Sprintf("Is user/group ownership of %s set to keystone?", filepath),
 			Details:     fmt.Sprintf("Failed to create SSH session: %v", err),
+			Timestamp:   currentTime,
 		}
 	}
 	defer session.Close()

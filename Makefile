@@ -59,12 +59,22 @@ cli-key-manager-%:
 cli-check-all:
 	@echo "Running all Identity checks..."
 	$(MAKE) cli-identity-01-01
+	$(MAKE) cli-identity-01-02
+	$(MAKE) cli-identity-01-03
+	$(MAKE) cli-identity-01-04
+	$(MAKE) cli-identity-01-05
+	$(MAKE) cli-identity-01-06
+	$(MAKE) cli-identity-01-07
+	$(MAKE) cli-identity-01-08
+	$(MAKE) cli-identity-02-01
 	@echo "Running all Dashboard checks..."
 	$(MAKE) cli-dashboard-04
 	$(MAKE) cli-dashboard-05
 	$(MAKE) cli-dashboard-06
 	@echo "Running all Secrets Management checks..."
 	$(MAKE) cli-key-manager-01-01
+	$(MAKE) cli-key-manager-01-02
+	$(MAKE) cli-key-manager-03
 
 # API checks
 api-identity-%:
